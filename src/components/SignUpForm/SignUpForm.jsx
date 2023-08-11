@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import { signUp } from "../../utilities/users-service";
 
 export default class SignUpForm extends Component {
 
@@ -18,13 +19,25 @@ export default class SignUpForm extends Component {
     });
   };
 
-  handleSubmit = (evt) => {
+  handleSubmit = async (evt) => {
     evt.preventDefault();
-    alert(JSON.stringify(this.state))
-    if (this.state.password !== this.state.confirm) {
-      this.setState({ error: 'Passwords do not match' });
-    } else {
-      this.props.handleSignUp(this.state);
+    try {
+      const formData = { ...this.state };
+      delete formData.error;
+      delete formData.confirm;
+
+      // The promise returned by the signUp method 
+      // will resolve to the user object included in the
+      // payload of the JSON Web Token (JWT)
+
+      const user = await signUp(formData);
+
+      console.log(user)
+
+    } catch (e) {
+      // An error orrcured
+      // Probably due to a duplicate email
+      this.setState({ error: 'Sign Up Failed - Try Again' });
     }
   }
   render() {
