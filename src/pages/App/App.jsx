@@ -1,21 +1,20 @@
-import "./App.css";
-import { useSelector } from "react-redux";
-
+import { useState } from 'react';
 import { Routes, Route } from "react-router-dom";
-
+import { getUser } from "../../utilities/users-service";
+import "./App.css";
 import AuthPage from "../AuthPage/AuthPage";
 import NewOrderPage from "../NewOrderPage/NewOrderPage";
 import OrderHistoryPage from "../OrderHistoryPage/OrderHistoryPage";
 import NavBar from "../../components/NavBar";
 
-function App() {
-  const user = useSelector((state) => state.user.user);
-
+export default function App() {
+  const [user, setUser] = useState(getUser());
+  console.log('user',user)
   return (
     <main className="App">
       { user ?
         <>
-          <NavBar />
+          <NavBar user={user} setUser={setUser}/>
           <Routes>  
             {/* Route components in here */}
             <Route path="/orders/new" element={<NewOrderPage />} />
@@ -23,10 +22,8 @@ function App() {
           </Routes>
         </>
         :
-        <AuthPage />
+        <AuthPage setUser={setUser}/>
       }
     </main>
   );
 }
-
-export default App;

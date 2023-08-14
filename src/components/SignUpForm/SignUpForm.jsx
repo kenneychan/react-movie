@@ -2,7 +2,6 @@ import { Component } from 'react'
 import { signUp } from "../../utilities/users-service";
 
 export default class SignUpForm extends Component {
-
   state = {
     name: '',
     email: '',
@@ -31,12 +30,12 @@ export default class SignUpForm extends Component {
       // payload of the JSON Web Token (JWT)
 
       const user = await signUp(formData);
-
-      console.log(user)
+      this.props.setUser(user);
 
     } catch (e) {
       // An error orrcured
       // Probably due to a duplicate email
+      console.log('error', e)
       this.setState({ error: 'Sign Up Failed - Try Again' });
     }
   }
